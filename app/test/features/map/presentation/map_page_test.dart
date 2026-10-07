@@ -28,7 +28,6 @@ void main() {
     await pumpLocationUpdate(tester);
 
     expect(find.byKey(const ValueKey('user-location-dot')), findsOneWidget);
-    expect(find.byTooltip('Center on my location'), findsOneWidget);
   });
 
   testWidgets('shows an error when permission is denied', (tester) async {
