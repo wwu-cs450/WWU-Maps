@@ -1,5 +1,5 @@
-import 'models/location_exception.dart';
-import 'models/user_location.dart';
+import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
+import 'package:wwu_maps_app/features/location/domain/models/user_location.dart';
 
 abstract interface class LocationRepository {
   /// Emits the user's location whenever it changes.

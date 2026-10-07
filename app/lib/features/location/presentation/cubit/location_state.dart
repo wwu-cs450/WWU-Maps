@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-import '../../domain/models/location_exception.dart';
-import '../../domain/models/user_location.dart';
+import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
+import 'package:wwu_maps_app/features/location/domain/models/user_location.dart';
 
 sealed class LocationState extends Equatable {
   const LocationState();

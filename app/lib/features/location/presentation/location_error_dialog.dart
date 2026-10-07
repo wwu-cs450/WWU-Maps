@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../domain/models/location_exception.dart';
-import 'cubit/location_cubit.dart';
+import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
+import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
 
 extension LocationFailureMessage on LocationFailure {
   String get message => switch (this) {
@@ -16,7 +16,7 @@ extension LocationFailureMessage on LocationFailure {
 
 /// Explains why the location is unavailable and offers a way to fix it.
 class LocationErrorDialog extends StatelessWidget {
-  const LocationErrorDialog({super.key, required this.failure});
+  const LocationErrorDialog({required this.failure, super.key});
 
   final LocationFailure failure;
 

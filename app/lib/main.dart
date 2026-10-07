@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wwu_maps_app/features/location/data/geolocator_location_repository.dart';
 import 'package:wwu_maps_app/features/location/domain/location_repository.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
 import 'package:wwu_maps_app/features/map/presentation/map_page.dart';
-
-import 'features/location/data/geolocator_location_repository.dart';
 
 void main() {
   runApp(const MainApp(locationRepository: GeolocatorLocationRepository()));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key, required this.locationRepository});
+  const MainApp({required this.locationRepository, super.key});
 
   final LocationRepository locationRepository;
 

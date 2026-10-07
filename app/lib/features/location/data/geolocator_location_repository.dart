@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../domain/models/location_exception.dart';
-import '../domain/location_repository.dart';
-import '../domain/models/user_location.dart';
+import 'package:wwu_maps_app/features/location/domain/location_repository.dart';
+import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
+import 'package:wwu_maps_app/features/location/domain/models/user_location.dart';
 
 /// [LocationRepository] backed by the geolocator plugin.
 class GeolocatorLocationRepository implements LocationRepository {

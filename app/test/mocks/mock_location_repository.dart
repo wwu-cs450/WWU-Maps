@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:latlong2/latlong.dart';
-import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
 import 'package:wwu_maps_app/features/location/domain/location_repository.dart';
+import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
 import 'package:wwu_maps_app/features/location/domain/models/user_location.dart';
 
 UserLocation userLocation(double latitude, double longitude) =>
