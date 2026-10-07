@@ -1,30 +1,65 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:geolocator/geolocator.dart';
 
-import 'package:app/main.dart';
+import 'package:wwu_maps_app/main.dart';
+import 'package:wwu_maps_app/services/location_service.dart';
+
+class FakeLocationService extends LocationService {
+  FakeLocationService(this._stream);
+
+  final Stream<Position> _stream;
+
+  @override
+  Stream<Position> positionStream() => _stream;
+}
+
+Position _position(double latitude, double longitude) => Position(
+  latitude: latitude,
+  longitude: longitude,
+  timestamp: DateTime(2026),
+  accuracy: 8,
+  altitude: 0,
+  altitudeAccuracy: 0,
+  heading: 0,
+  headingAccuracy: 0,
+  speed: 0,
+  speedAccuracy: 0,
+);
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('shows the current position', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: HomePage(
+          title: 'WWU Maps',
+          locationService: FakeLocationService(
+            Stream.value(_position(48.734, -122.486)),
+          ),
+        ),
+      ),
+    );
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('48.734000, -122.486000\n±8 m'), findsOneWidget);
+  });
+
+  testWidgets('shows an error when permission is denied', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: HomePage(
+          title: 'WWU Maps',
+          locationService: FakeLocationService(
+            Stream.error(
+              const LocationException(LocationFailure.permissionDenied),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Location permission was denied.'), findsOneWidget);
+    expect(find.text('Try again'), findsOneWidget);
   });
 }
