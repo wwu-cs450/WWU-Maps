@@ -3,6 +3,8 @@
          so users on Android 12+ can choose approximate or precise location. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Needed in release builds to download map tiles. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="WWU Maps"
         android:name="${applicationName}"
