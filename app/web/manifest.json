@@ -1,11 +1,11 @@
 {
-    "name": "app",
-    "short_name": "app",
+    "name": "WWU Maps",
+    "short_name": "WWU Maps",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#5d6747",
+    "theme_color": "#5d6747",
+    "description": "The front-end application for WWU Maps.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

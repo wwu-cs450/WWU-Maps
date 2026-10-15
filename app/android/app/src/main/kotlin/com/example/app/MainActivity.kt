@@ -1,4 +1,4 @@
-package com.example.app
+package edu.wallawalla.maps
 
 import io.flutter.embedding.android.FlutterActivity
 
