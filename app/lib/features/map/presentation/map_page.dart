@@ -7,6 +7,7 @@ import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_state.dart';
 import 'package:wwu_maps_app/features/location/presentation/location_error_dialog.dart';
 import 'package:wwu_maps_app/features/map/presentation/user_location_layers.dart';
+import 'package:wwu_maps_app/features/search/presentation/room_search_bar.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -78,6 +79,16 @@ class _MapPageState extends State<MapPage> {
                       source: Text('OpenStreetMap contributors'),
                     ),
                   ],
+                ),
+                // Bottom padding leaves the map attribution visible below.
+                const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16, 16, 16, 40),
+                      child: RoomSearchBar(),
+                    ),
+                  ),
                 ),
               ],
             ),

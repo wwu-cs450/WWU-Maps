@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
+import 'package:wwu_maps_app/features/map/presentation/map_page.dart';
+import 'package:wwu_maps_app/features/search/domain/models/room_query.dart';
+import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dart';
+import 'package:wwu_maps_app/features/search/presentation/cubit/search_state.dart';
 import 'package:wwu_maps_app/main.dart';
 
 import '../../../mocks/mock_location_repository.dart';
@@ -74,5 +79,48 @@ void main() {
 
     expect(find.text('Open location settings'), findsNothing);
     expect(find.text('Try again'), findsOneWidget);
+  });
+
+  group('room search', () {
+    SearchState searchState(WidgetTester tester) =>
+        tester.element(find.byType(MapPage)).read<SearchCubit>().state;
+
+    testWidgets('submits the room when Enter is pressed', (tester) async {
+      await pumpApp(tester);
+
+      await tester.enterText(find.byType(SearchBar), ' 101 ');
+      await tester.testTextInput.receiveAction(TextInputAction.search);
+      await tester.pump();
+
+      expect(
+        searchState(tester),
+        const SearchSubmitted(RoomQuery(roomNumber: '101')),
+      );
+    });
+
+    testWidgets('submits the room when the search button is tapped', (
+      tester,
+    ) async {
+      await pumpApp(tester);
+
+      await tester.enterText(find.byType(SearchBar), '101');
+      await tester.tap(find.byTooltip('Search'));
+      await tester.pump();
+
+      expect(
+        searchState(tester),
+        const SearchSubmitted(RoomQuery(roomNumber: '101')),
+      );
+    });
+
+    testWidgets('does not submit blank text', (tester) async {
+      await pumpApp(tester);
+
+      await tester.enterText(find.byType(SearchBar), '   ');
+      await tester.tap(find.byTooltip('Search'));
+      await tester.pump();
+
+      expect(searchState(tester), const SearchIdle());
+    });
   });
 }

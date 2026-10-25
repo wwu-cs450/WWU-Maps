@@ -4,6 +4,7 @@ import 'package:wwu_maps_app/features/location/data/geolocator_location_reposito
 import 'package:wwu_maps_app/features/location/domain/location_repository.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
 import 'package:wwu_maps_app/features/map/presentation/map_page.dart';
+import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dart';
 
 void main() {
   runApp(const MainApp(locationRepository: GeolocatorLocationRepository()));
@@ -29,7 +30,11 @@ class MainApp extends StatelessWidget {
               dynamicSchemeVariant: .monochrome,
             ),
           ),
-          home: const MapPage(),
+          // Only the map screen searches, so the cubit lives around it.
+          home: BlocProvider(
+            create: (context) => SearchCubit(),
+            child: const MapPage(),
+          ),
         ),
       ),
     );
