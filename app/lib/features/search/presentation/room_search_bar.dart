@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dart';
+import 'package:wwu_maps_app/features/search/presentation/cubit/search_state.dart';
+import 'package:wwu_maps_app/features/search/presentation/room_not_found_message.dart';
 
 /// The search bar where the user types the room they want to go to.
 class RoomSearchBar extends StatefulWidget {
@@ -31,7 +35,7 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
   }
 
   void _submit() {
-    context.read<SearchCubit>().submit(_controller.text);
+    unawaited(context.read<SearchCubit>().submit(_controller.text));
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
@@ -40,6 +44,24 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildSearchBar(context),
+        BlocBuilder<SearchCubit, SearchState>(
+          builder: (context, state) => switch (state) {
+            SearchRoomNotFound(:final query) => RoomNotFoundMessage(
+              'Room KRH ${query.roomNumber} doesn\'t exist',
+            ),
+            _ => const SizedBox.shrink(),
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSearchBar(BuildContext context) {
     return SearchBar(
       controller: _controller,
       focusNode: _focusNode,
@@ -56,8 +78,9 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
             )
           : null,
       hintText: _focusNode.hasFocus ? null : 'Search room number',
-      keyboardType: TextInputType.number,
+      keyboardType: const TextInputType.numberWithOptions(signed: true),
       textInputAction: TextInputAction.search,
+      onChanged: (_) => context.read<SearchCubit>().clearNotFound(),
       onSubmitted: (_) => _submit(),
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       trailing: [

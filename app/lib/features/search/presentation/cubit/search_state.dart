@@ -23,3 +23,13 @@ final class SearchSubmitted extends SearchState {
   @override
   List<Object?> get props => [query];
 }
+
+/// The user searched for a room that doesn't exist.
+final class SearchRoomNotFound extends SearchState {
+  const SearchRoomNotFound(this.query);
+
+  final RoomQuery query;
+
+  @override
+  List<Object?> get props => [query];
+}
