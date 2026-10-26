@@ -55,6 +55,7 @@ class _MapPageState extends State<MapPage> {
       builder: (context, state) => Stack(
         children: [
           Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Stack(
               children: [
                 FlutterMap(
