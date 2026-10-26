@@ -52,6 +52,7 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
             )
           : null,
       hintText: _focusNode.hasFocus ? null : 'Search room number',
+      keyboardType: TextInputType.number,
       textInputAction: TextInputAction.search,
       onSubmitted: (_) => _submit(),
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
