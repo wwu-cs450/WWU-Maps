@@ -24,6 +24,18 @@ class GraphRules {
     for (final entry in nodes.entries) {
       final current = entry.value;
 
+      if (current.type == NodeType.entranceExit && current.gps == null) {
+        throw StateError(
+          'Entrance/exit node "${current.id}" must include GPS data.',
+        );
+      }
+
+      if (current.type != NodeType.entranceExit && current.pixelLocation == null) {
+        throw StateError(
+          'Non-entrance/exit node "${current.id}" must include pixelLocation.',
+        );
+      }
+
       for (final neighborId in current.neighbors.keys) {
         final neighbor = nodes[neighborId];
         if (neighbor == null) {

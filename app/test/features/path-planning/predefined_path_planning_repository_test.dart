@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:wwu_maps_app/features/path-planning/data/predefined_path_planning_repository.dart';
@@ -65,7 +66,7 @@ void main() {
         'room_a': GraphNode(
           id: 'room_a',
           type: NodeType.room,
-          gps: const LatLng(46.0, -118.0),
+          pixelLocation: const Offset(10, 10),
           buildingName: 'Science Center',
           floorLevel: 1,
           neighbors: {'room_b': 12.0},
@@ -73,7 +74,7 @@ void main() {
         'room_b': GraphNode(
           id: 'room_b',
           type: NodeType.room,
-          gps: const LatLng(46.0, -118.1),
+          pixelLocation: const Offset(20, 20),
           buildingName: 'Science Center',
           floorLevel: 1,
           neighbors: {'room_a': 12.0},
@@ -88,7 +89,7 @@ void main() {
         'stair_a': GraphNode(
           id: 'stair_a',
           type: NodeType.stairway,
-          gps: const LatLng(46.0, -118.2),
+          pixelLocation: const Offset(50, 50),
           buildingName: 'Science Center',
           floorLevel: 1,
           neighbors: {'stair_b': 20.0},
@@ -96,7 +97,7 @@ void main() {
         'stair_b': GraphNode(
           id: 'stair_b',
           type: NodeType.stairway,
-          gps: const LatLng(46.0, -118.3),
+          pixelLocation: const Offset(80, 80),
           buildingName: 'Science Center',
           floorLevel: 2,
           neighbors: {'stair_a': 20.0},

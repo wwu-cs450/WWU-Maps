@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/graph_rules.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/models/graph_node.dart';
@@ -14,7 +15,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     'hall_1': GraphNode(
       id: 'hall_1',
       type: NodeType.hallway,
-      gps: const LatLng(46.0486, -118.3672),
+      pixelLocation: const Offset(200, 180),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {
@@ -27,7 +28,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     'r_101': GraphNode(
       id: 'r_101',
       type: NodeType.room,
-      gps: const LatLng(46.0487, -118.3670),
+      pixelLocation: const Offset(120, 220),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {'hall_1': 18.0},
@@ -35,7 +36,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     'r_102': GraphNode(
       id: 'r_102',
       type: NodeType.room,
-      gps: const LatLng(46.0485, -118.3675),
+      pixelLocation: const Offset(280, 220),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {'hall_1': 22.0},
@@ -43,14 +44,14 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     'stair_1': GraphNode(
       id: 'stair_1',
       type: NodeType.stairway,
-      gps: const LatLng(46.0486, -118.3679),
+      pixelLocation: const Offset(200, 120),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {'hall_1': 12.0, 'stair_2': 18.0},
     ),
     'entrance_1': GraphNode(
       id: 'entrance_1',
-      type: NodeType.entrance,
+      type: NodeType.entranceExit,
       gps: const LatLng(46.0489, -118.3672),
       buildingName: 'Science Center',
       floorLevel: 1,
@@ -59,7 +60,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     'hall_2': GraphNode(
       id: 'hall_2',
       type: NodeType.hallway,
-      gps: const LatLng(46.0486, -118.3672),
+      pixelLocation: const Offset(200, 320),
       buildingName: 'Science Center',
       floorLevel: 2,
       neighbors: {'stair_2': 14.0, 'r_201': 20.0},
@@ -67,7 +68,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     'stair_2': GraphNode(
       id: 'stair_2',
       type: NodeType.stairway,
-      gps: const LatLng(46.0486, -118.3679),
+      pixelLocation: const Offset(200, 420),
       buildingName: 'Science Center',
       floorLevel: 2,
       neighbors: {'hall_2': 14.0, 'stair_1': 18.0},
@@ -75,7 +76,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     'r_201': GraphNode(
       id: 'r_201',
       type: NodeType.room,
-      gps: const LatLng(46.0484, -118.3676),
+      pixelLocation: const Offset(280, 320),
       buildingName: 'Science Center',
       floorLevel: 2,
       neighbors: {'hall_2': 20.0},

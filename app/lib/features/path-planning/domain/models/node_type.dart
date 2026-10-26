@@ -1,1 +1,1 @@
-enum NodeType { entrance, hallway, room, stairway }
+enum NodeType { entranceExit, hallway, room, stairway }
