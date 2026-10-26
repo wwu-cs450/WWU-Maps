@@ -78,7 +78,7 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
             )
           : null,
       hintText: _focusNode.hasFocus ? null : 'Search room number',
-      keyboardType: TextInputType.number,
+      keyboardType: const TextInputType.numberWithOptions(signed: true),
       textInputAction: TextInputAction.search,
       onChanged: (_) => context.read<SearchCubit>().clearNotFound(),
       onSubmitted: (_) => _submit(),
