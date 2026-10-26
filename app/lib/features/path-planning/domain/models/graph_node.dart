@@ -13,16 +13,16 @@ class GraphNode extends Equatable {
     required this.floorLevel,
     Map<String, double>? neighbors,
   }) : assert(
-          type == NodeType.entranceExit ? gps != null : gps == null,
-          'Only entrance/exit nodes can have GPS.',
-        ),
-        assert(
-          type == NodeType.entranceExit
-              ? pixelLocation == null
-              : pixelLocation != null,
-          'Only non-entrance/exit nodes can have pixelLocation.',
-        ),
-        neighbors = Map.unmodifiable(neighbors ?? const <String, double>{});
+         type == NodeType.entranceExit ? gps != null : gps == null,
+         'Only entrance/exit nodes can have GPS.',
+       ),
+       assert(
+         type == NodeType.entranceExit
+             ? pixelLocation == null
+             : pixelLocation != null,
+         'Only non-entrance/exit nodes can have pixelLocation.',
+       ),
+       neighbors = Map.unmodifiable(neighbors ?? const <String, double>{});
 
   final String id;
   final NodeType type;

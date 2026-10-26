@@ -30,7 +30,8 @@ class GraphRules {
         );
       }
 
-      if (current.type != NodeType.entranceExit && current.pixelLocation == null) {
+      if (current.type != NodeType.entranceExit &&
+          current.pixelLocation == null) {
         throw StateError(
           'Non-entrance/exit node "${current.id}" must include pixelLocation.',
         );
