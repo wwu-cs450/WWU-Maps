@@ -18,8 +18,9 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
   @override
   void initState() {
     super.initState();
-    // Rebuild so the building prefix appears and disappears with focus.
+    // Rebuild so the building prefix appears and disappears with focus and text.
     _focusNode.addListener(() => setState(() {}));
+    _controller.addListener(() => setState(() {}));
   }
 
   @override
@@ -34,12 +35,15 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  /// Shown while typing, and kept afterwards so the room reads as "KRH 101".
+  bool get _showPrefix => _focusNode.hasFocus || _controller.text.isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
     return SearchBar(
       controller: _controller,
       focusNode: _focusNode,
-      leading: _focusNode.hasFocus
+      leading: _showPrefix
           ? Padding(
               padding: const EdgeInsetsDirectional.only(start: 16),
               child: Text(
