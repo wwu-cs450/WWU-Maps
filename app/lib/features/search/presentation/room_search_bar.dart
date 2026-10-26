@@ -32,6 +32,7 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
       hintText: 'Search room number',
       textInputAction: TextInputAction.search,
       onSubmitted: (_) => _submit(),
+      onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       trailing: [
         IconButton(
           tooltip: 'Search',
