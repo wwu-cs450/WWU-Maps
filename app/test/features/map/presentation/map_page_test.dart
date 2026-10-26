@@ -9,6 +9,7 @@ import 'package:wwu_maps_app/features/search/presentation/cubit/search_state.dar
 import 'package:wwu_maps_app/main.dart';
 
 import '../../../mocks/mock_location_repository.dart';
+import '../../../mocks/mock_room_repository.dart';
 
 void main() {
   late MockLocationRepository repository;
@@ -16,7 +17,12 @@ void main() {
   setUp(() => repository = MockLocationRepository());
 
   Future<void> pumpApp(WidgetTester tester) async {
-    await tester.pumpWidget(MainApp(locationRepository: repository));
+    await tester.pumpWidget(
+      MainApp(
+        locationRepository: repository,
+        roomRepository: MockRoomRepository({'101'}),
+      ),
+    );
     await tester.pump();
   }
 
@@ -121,6 +127,30 @@ void main() {
       await tester.pump();
 
       expect(searchState(tester), const SearchIdle());
+    });
+
+    testWidgets('says when the room does not exist', (tester) async {
+      await pumpApp(tester);
+
+      await tester.enterText(find.byType(SearchBar), '999');
+      await tester.tap(find.byTooltip('Search'));
+      await tester.pump();
+
+      expect(find.text("Room KRH 999 doesn't exist"), findsOneWidget);
+    });
+
+    testWidgets('hides the not found message when the text changes', (
+      tester,
+    ) async {
+      await pumpApp(tester);
+
+      await tester.enterText(find.byType(SearchBar), '999');
+      await tester.tap(find.byTooltip('Search'));
+      await tester.pump();
+      await tester.enterText(find.byType(SearchBar), '99');
+      await tester.pump();
+
+      expect(find.text("Room KRH 999 doesn't exist"), findsNothing);
     });
   });
 }
