@@ -55,6 +55,7 @@ class _MapPageState extends State<MapPage> {
       builder: (context, state) => Stack(
         children: [
           Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Stack(
               children: [
                 FlutterMap(
@@ -80,12 +81,11 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ],
                 ),
-                // Bottom padding leaves the map attribution visible below.
                 const Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.topCenter,
                   child: SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(16, 16, 16, 40),
+                      padding: EdgeInsets.all(16),
                       child: RoomSearchBar(),
                     ),
                   ),

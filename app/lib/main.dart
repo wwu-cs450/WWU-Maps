@@ -29,6 +29,9 @@ class MainApp extends StatelessWidget {
               seedColor: Colors.black,
               dynamicSchemeVariant: .monochrome,
             ),
+            searchBarTheme: const SearchBarThemeData(
+              backgroundColor: WidgetStatePropertyAll(Colors.white),
+            ),
           ),
           // Only the map screen searches, so the cubit lives around it.
           home: BlocProvider(

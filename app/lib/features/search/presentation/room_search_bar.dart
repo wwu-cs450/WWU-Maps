@@ -13,10 +13,20 @@ class RoomSearchBar extends StatefulWidget {
 
 class _RoomSearchBarState extends State<RoomSearchBar> {
   final _controller = TextEditingController();
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // Rebuild so the building prefix appears and disappears with focus and text.
+    _focusNode.addListener(() => setState(() {}));
+    _controller.addListener(() => setState(() {}));
+  }
 
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -25,13 +35,31 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  /// Shown while typing, and kept afterwards so the room reads as "KRH 101".
+  bool get _showPrefix => _focusNode.hasFocus || _controller.text.isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
     return SearchBar(
       controller: _controller,
-      hintText: 'Search room number',
+      focusNode: _focusNode,
+      leading: _showPrefix
+          ? Padding(
+              padding: const EdgeInsetsDirectional.only(start: 16),
+              child: Text(
+                'KRH',
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          : null,
+      hintText: _focusNode.hasFocus ? null : 'Search room number',
+      keyboardType: TextInputType.number,
       textInputAction: TextInputAction.search,
       onSubmitted: (_) => _submit(),
+      onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       trailing: [
         IconButton(
           tooltip: 'Search',
