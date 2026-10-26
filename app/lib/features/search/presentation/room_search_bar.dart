@@ -13,10 +13,19 @@ class RoomSearchBar extends StatefulWidget {
 
 class _RoomSearchBarState extends State<RoomSearchBar> {
   final _controller = TextEditingController();
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // Rebuild so the building prefix appears and disappears with focus.
+    _focusNode.addListener(() => setState(() {}));
+  }
 
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -29,7 +38,20 @@ class _RoomSearchBarState extends State<RoomSearchBar> {
   Widget build(BuildContext context) {
     return SearchBar(
       controller: _controller,
-      hintText: 'Search room number',
+      focusNode: _focusNode,
+      leading: _focusNode.hasFocus
+          ? Padding(
+              padding: const EdgeInsetsDirectional.only(start: 16),
+              child: Text(
+                'KRH',
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          : null,
+      hintText: _focusNode.hasFocus ? null : 'Search room number',
       textInputAction: TextInputAction.search,
       onSubmitted: (_) => _submit(),
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
