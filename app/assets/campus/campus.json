@@ -1,0 +1,47 @@
+{
+  "buildings": [
+    {
+      "code": "KRH",
+      "name": "Kretschmar Hall",
+      "floors": [1, 2, 3],
+      "entrances": [
+        {
+          "id": "KRH-E1",
+          "name": "Parking lot entrance",
+          "floor": 1,
+          "lat": 46.04602,
+          "lng": -118.39004
+        },
+        {
+          "id": "KRH-E2",
+          "name": "Bowers side entrance",
+          "floor": 2,
+          "lat": 46.04616,
+          "lng": -118.39032
+        },
+        {
+          "id": "KRH-E3",
+          "name": "East side entrance",
+          "floor": 1,
+          "lat": 46.04619,
+          "lng": -118.38996
+        },
+        {
+          "id": "KRH-E4",
+          "name": "Grand staircase entrance (engineering)",
+          "floor": 2,
+          "lat": 46.04617,
+          "lng": -118.39014
+        },
+        {
+          "id": "KRH-E5",
+          "name": "Church side entrance",
+          "floor": 2,
+          "lat": 46.04607,
+          "lng": -118.39104
+        }
+      ],
+      "rooms": []
+    }
+  ]
+}
