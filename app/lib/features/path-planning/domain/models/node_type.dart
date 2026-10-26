@@ -1,6 +1,1 @@
-enum NodeType {
-  entrance,
-  hallway,
-  room,
-  stairway,
-}
+enum NodeType { entrance, hallway, room, stairway }

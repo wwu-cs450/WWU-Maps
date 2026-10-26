@@ -24,10 +24,14 @@ void main() {
       final result = repository.findShortestPath('r_101', 'r_201');
 
       expect(result.found, isTrue);
-      expect(
-        result.nodeIds,
-        ['r_101', 'hall_1', 'stair_1', 'stair_2', 'hall_2', 'r_201'],
-      );
+      expect(result.nodeIds, [
+        'r_101',
+        'hall_1',
+        'stair_1',
+        'stair_2',
+        'hall_2',
+        'r_201',
+      ]);
       expect(result.totalDistance, closeTo(82.0, 0.0001));
     });
 
@@ -35,10 +39,14 @@ void main() {
       final result = repository.findShortestPath('entrance_1', 'r_201');
 
       expect(result.found, isTrue);
-      expect(
-        result.nodeIds,
-        ['entrance_1', 'hall_1', 'stair_1', 'stair_2', 'hall_2', 'r_201'],
-      );
+      expect(result.nodeIds, [
+        'entrance_1',
+        'hall_1',
+        'stair_1',
+        'stair_2',
+        'hall_2',
+        'r_201',
+      ]);
       expect(result.totalDistance, closeTo(80.0, 0.0001));
     });
 

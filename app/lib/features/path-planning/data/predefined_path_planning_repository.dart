@@ -30,9 +30,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       gps: const LatLng(46.0487, -118.3670),
       buildingName: 'Science Center',
       floorLevel: 1,
-      neighbors: {
-        'hall_1': 18.0,
-      },
+      neighbors: {'hall_1': 18.0},
     ),
     'r_102': GraphNode(
       id: 'r_102',
@@ -40,9 +38,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       gps: const LatLng(46.0485, -118.3675),
       buildingName: 'Science Center',
       floorLevel: 1,
-      neighbors: {
-        'hall_1': 22.0,
-      },
+      neighbors: {'hall_1': 22.0},
     ),
     'stair_1': GraphNode(
       id: 'stair_1',
@@ -50,10 +46,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       gps: const LatLng(46.0486, -118.3679),
       buildingName: 'Science Center',
       floorLevel: 1,
-      neighbors: {
-        'hall_1': 12.0,
-        'stair_2': 18.0,
-      },
+      neighbors: {'hall_1': 12.0, 'stair_2': 18.0},
     ),
     'entrance_1': GraphNode(
       id: 'entrance_1',
@@ -61,9 +54,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       gps: const LatLng(46.0489, -118.3672),
       buildingName: 'Science Center',
       floorLevel: 1,
-      neighbors: {
-        'hall_1': 16.0,
-      },
+      neighbors: {'hall_1': 16.0},
     ),
     'hall_2': GraphNode(
       id: 'hall_2',
@@ -71,10 +62,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       gps: const LatLng(46.0486, -118.3672),
       buildingName: 'Science Center',
       floorLevel: 2,
-      neighbors: {
-        'stair_2': 14.0,
-        'r_201': 20.0,
-      },
+      neighbors: {'stair_2': 14.0, 'r_201': 20.0},
     ),
     'stair_2': GraphNode(
       id: 'stair_2',
@@ -82,10 +70,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       gps: const LatLng(46.0486, -118.3679),
       buildingName: 'Science Center',
       floorLevel: 2,
-      neighbors: {
-        'hall_2': 14.0,
-        'stair_1': 18.0,
-      },
+      neighbors: {'hall_2': 14.0, 'stair_1': 18.0},
     ),
     'r_201': GraphNode(
       id: 'r_201',
@@ -93,9 +78,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       gps: const LatLng(46.0484, -118.3676),
       buildingName: 'Science Center',
       floorLevel: 2,
-      neighbors: {
-        'hall_2': 20.0,
-      },
+      neighbors: {'hall_2': 20.0},
     ),
   };
 
@@ -124,15 +107,12 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     while (true) {
       final current = distances.entries
           .where((entry) => !visited.contains(entry.key))
-          .fold<MapEntry<String, double>?>(
-            null,
-            (best, entry) {
-              if (best == null || entry.value < best.value) {
-                return entry;
-              }
-              return best;
-            },
-          );
+          .fold<MapEntry<String, double>?>(null, (best, entry) {
+            if (best == null || entry.value < best.value) {
+              return entry;
+            }
+            return best;
+          });
 
       if (current == null) {
         break;
