@@ -1,5 +1,5 @@
-import 'models/graph_node.dart';
-import 'models/node_type.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/graph_node.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/node_type.dart';
 
 class GraphRules {
   const GraphRules._();

@@ -1,10 +1,9 @@
 import 'package:latlong2/latlong.dart';
-
-import '../domain/graph_rules.dart';
-import '../domain/models/graph_node.dart';
-import '../domain/models/node_type.dart';
-import '../domain/models/path_result.dart';
-import '../domain/path_planning_repository.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/graph_rules.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/graph_node.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/node_type.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/path_result.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/path_planning_repository.dart';
 
 class PredefinedPathPlanningRepository implements PathPlanningRepository {
   PredefinedPathPlanningRepository() {
@@ -12,10 +11,10 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
   }
 
   final Map<String, GraphNode> _nodes = {
-    'hall_1': const GraphNode(
+    'hall_1': GraphNode(
       id: 'hall_1',
       type: NodeType.hallway,
-      gps: LatLng(46.0486, -118.3672),
+      gps: const LatLng(46.0486, -118.3672),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {
@@ -25,30 +24,30 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
         'entrance_1': 16.0,
       },
     ),
-    'r_101': const GraphNode(
+    'r_101': GraphNode(
       id: 'r_101',
       type: NodeType.room,
-      gps: LatLng(46.0487, -118.3670),
+      gps: const LatLng(46.0487, -118.3670),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {
         'hall_1': 18.0,
       },
     ),
-    'r_102': const GraphNode(
+    'r_102': GraphNode(
       id: 'r_102',
       type: NodeType.room,
-      gps: LatLng(46.0485, -118.3675),
+      gps: const LatLng(46.0485, -118.3675),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {
         'hall_1': 22.0,
       },
     ),
-    'stair_1': const GraphNode(
+    'stair_1': GraphNode(
       id: 'stair_1',
       type: NodeType.stairway,
-      gps: LatLng(46.0486, -118.3679),
+      gps: const LatLng(46.0486, -118.3679),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {
@@ -56,20 +55,20 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
         'stair_2': 18.0,
       },
     ),
-    'entrance_1': const GraphNode(
+    'entrance_1': GraphNode(
       id: 'entrance_1',
       type: NodeType.entrance,
-      gps: LatLng(46.0489, -118.3672),
+      gps: const LatLng(46.0489, -118.3672),
       buildingName: 'Science Center',
       floorLevel: 1,
       neighbors: {
         'hall_1': 16.0,
       },
     ),
-    'hall_2': const GraphNode(
+    'hall_2': GraphNode(
       id: 'hall_2',
       type: NodeType.hallway,
-      gps: LatLng(46.0486, -118.3672),
+      gps: const LatLng(46.0486, -118.3672),
       buildingName: 'Science Center',
       floorLevel: 2,
       neighbors: {
@@ -77,10 +76,10 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
         'r_201': 20.0,
       },
     ),
-    'stair_2': const GraphNode(
+    'stair_2': GraphNode(
       id: 'stair_2',
       type: NodeType.stairway,
-      gps: LatLng(46.0486, -118.3679),
+      gps: const LatLng(46.0486, -118.3679),
       buildingName: 'Science Center',
       floorLevel: 2,
       neighbors: {
@@ -88,10 +87,10 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
         'stair_1': 18.0,
       },
     ),
-    'r_201': const GraphNode(
+    'r_201': GraphNode(
       id: 'r_201',
       type: NodeType.room,
-      gps: LatLng(46.0484, -118.3676),
+      gps: const LatLng(46.0484, -118.3676),
       buildingName: 'Science Center',
       floorLevel: 2,
       neighbors: {
@@ -125,12 +124,15 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     while (true) {
       final current = distances.entries
           .where((entry) => !visited.contains(entry.key))
-          .fold<MapEntry<String, double>?>(null, (best, entry) {
-            if (best == null || entry.value < best.value) {
-              return entry;
-            }
-            return best;
-          } );
+          .fold<MapEntry<String, double>?>(
+            null,
+            (best, entry) {
+              if (best == null || entry.value < best.value) {
+                return entry;
+              }
+              return best;
+            },
+          );
 
       if (current == null) {
         break;
@@ -158,7 +160,8 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       }
     }
 
-    if (distances[endId] == null || distances[endId] == double.infinity) {
+    final endDistance = distances[endId];
+    if (endDistance == null || endDistance.isInfinite) {
       return const PathResult(nodeIds: [], totalDistance: 0, found: false);
     }
 
@@ -168,11 +171,10 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       path.add(cursor);
       cursor = previous[cursor];
     }
-    path = path.reversed.toList();
 
     return PathResult(
-      nodeIds: path,
-      totalDistance: distances[endId]!,
+      nodeIds: path.reversed.toList(),
+      totalDistance: endDistance,
       found: true,
     );
   }

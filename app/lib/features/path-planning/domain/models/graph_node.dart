@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
-
-import 'node_type.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/node_type.dart';
 
 class GraphNode extends Equatable {
-  const GraphNode({
+  GraphNode({
     required this.id,
     required this.type,
     required this.gps,

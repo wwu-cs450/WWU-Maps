@@ -13,6 +13,13 @@ void main() {
       repository = PredefinedPathPlanningRepository();
     });
 
+    test('loads the predefined graph and contains the expected nodes', () {
+      expect(repository.nodes.containsKey('hall_1'), isTrue);
+      expect(repository.nodes.containsKey('r_101'), isTrue);
+      expect(repository.nodes.containsKey('stair_2'), isTrue);
+      expect(repository.nodes.length, equals(8));
+    });
+
     test('finds the shortest room-to-room path via hallway nodes', () {
       final result = repository.findShortestPath('r_101', 'r_201');
 
@@ -24,7 +31,7 @@ void main() {
       expect(result.totalDistance, closeTo(82.0, 0.0001));
     });
 
-    test('finds the shortest path from entrance to room through the stairwell', () {
+    test('finds the shortest path from entrance to room', () {
       final result = repository.findShortestPath('entrance_1', 'r_201');
 
       expect(result.found, isTrue);
@@ -47,18 +54,18 @@ void main() {
   group('GraphRules', () {
     test('rejects direct room-to-room connections', () {
       final graph = <String, GraphNode>{
-        'room_a': const GraphNode(
+        'room_a': GraphNode(
           id: 'room_a',
           type: NodeType.room,
-          gps: LatLng(46.0, -118.0),
+          gps: const LatLng(46.0, -118.0),
           buildingName: 'Science Center',
           floorLevel: 1,
           neighbors: {'room_b': 12.0},
         ),
-        'room_b': const GraphNode(
+        'room_b': GraphNode(
           id: 'room_b',
           type: NodeType.room,
-          gps: LatLng(46.0, -118.1),
+          gps: const LatLng(46.0, -118.1),
           buildingName: 'Science Center',
           floorLevel: 1,
           neighbors: {'room_a': 12.0},
@@ -70,18 +77,18 @@ void main() {
 
     test('allows direct stairway-to-stairway connections', () {
       final graph = <String, GraphNode>{
-        'stair_a': const GraphNode(
+        'stair_a': GraphNode(
           id: 'stair_a',
           type: NodeType.stairway,
-          gps: LatLng(46.0, -118.2),
+          gps: const LatLng(46.0, -118.2),
           buildingName: 'Science Center',
           floorLevel: 1,
           neighbors: {'stair_b': 20.0},
         ),
-        'stair_b': const GraphNode(
+        'stair_b': GraphNode(
           id: 'stair_b',
           type: NodeType.stairway,
-          gps: LatLng(46.0, -118.3),
+          gps: const LatLng(46.0, -118.3),
           buildingName: 'Science Center',
           floorLevel: 2,
           neighbors: {'stair_a': 20.0},
