@@ -4,21 +4,36 @@ import 'package:wwu_maps_app/features/location/data/geolocator_location_reposito
 import 'package:wwu_maps_app/features/location/domain/location_repository.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
 import 'package:wwu_maps_app/features/map/presentation/map_page.dart';
+import 'package:wwu_maps_app/features/search/data/placeholder_room_repository.dart';
+import 'package:wwu_maps_app/features/search/domain/room_repository.dart';
 import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dart';
 
 void main() {
-  runApp(const MainApp(locationRepository: GeolocatorLocationRepository()));
+  runApp(
+    const MainApp(
+      locationRepository: GeolocatorLocationRepository(),
+      roomRepository: PlaceholderRoomRepository(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({required this.locationRepository, super.key});
+  const MainApp({
+    required this.locationRepository,
+    required this.roomRepository,
+    super.key,
+  });
 
   final LocationRepository locationRepository;
+  final RoomRepository roomRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: locationRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: locationRepository),
+        RepositoryProvider.value(value: roomRepository),
+      ],
       child: BlocProvider(
         create: (context) =>
             LocationCubit(context.read<LocationRepository>())..start(),
@@ -35,7 +50,7 @@ class MainApp extends StatelessWidget {
           ),
           // Only the map screen searches, so the cubit lives around it.
           home: BlocProvider(
-            create: (context) => SearchCubit(),
+            create: (context) => SearchCubit(context.read<RoomRepository>()),
             child: const MapPage(),
           ),
         ),
