@@ -1,0 +1,162 @@
+import 'package:flutter/rendering.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/graph_rules.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/graph_node.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/node_type.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/path_result.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/path_planning_repository.dart';
+
+class PredefinedPathPlanningRepository implements PathPlanningRepository {
+  PredefinedPathPlanningRepository() {
+    GraphRules.validateGraph(nodes);
+  }
+
+  final Map<String, GraphNode> _nodes = {
+    'hall_1': GraphNode(
+      id: 'hall_1',
+      type: NodeType.hallway,
+      pixelLocation: const Offset(200, 180),
+      buildingName: 'Science Center',
+      floorLevel: 1,
+      neighbors: {
+        'r_101': 18.0,
+        'r_102': 22.0,
+        'stair_1': 12.0,
+        'entrance_1': 16.0,
+      },
+    ),
+    'r_101': GraphNode(
+      id: 'r_101',
+      type: NodeType.room,
+      pixelLocation: const Offset(120, 220),
+      buildingName: 'Science Center',
+      floorLevel: 1,
+      neighbors: {'hall_1': 18.0},
+    ),
+    'r_102': GraphNode(
+      id: 'r_102',
+      type: NodeType.room,
+      pixelLocation: const Offset(280, 220),
+      buildingName: 'Science Center',
+      floorLevel: 1,
+      neighbors: {'hall_1': 22.0},
+    ),
+    'stair_1': GraphNode(
+      id: 'stair_1',
+      type: NodeType.stairway,
+      pixelLocation: const Offset(200, 120),
+      buildingName: 'Science Center',
+      floorLevel: 1,
+      neighbors: {'hall_1': 12.0, 'stair_2': 18.0},
+    ),
+    'entrance_1': GraphNode(
+      id: 'entrance_1',
+      type: NodeType.entranceExit,
+      gps: const LatLng(46.0489, -118.3672),
+      buildingName: 'Science Center',
+      floorLevel: 1,
+      neighbors: {'hall_1': 16.0},
+    ),
+    'hall_2': GraphNode(
+      id: 'hall_2',
+      type: NodeType.hallway,
+      pixelLocation: const Offset(200, 320),
+      buildingName: 'Science Center',
+      floorLevel: 2,
+      neighbors: {'stair_2': 14.0, 'r_201': 20.0},
+    ),
+    'stair_2': GraphNode(
+      id: 'stair_2',
+      type: NodeType.stairway,
+      pixelLocation: const Offset(200, 420),
+      buildingName: 'Science Center',
+      floorLevel: 2,
+      neighbors: {'hall_2': 14.0, 'stair_1': 18.0},
+    ),
+    'r_201': GraphNode(
+      id: 'r_201',
+      type: NodeType.room,
+      pixelLocation: const Offset(280, 320),
+      buildingName: 'Science Center',
+      floorLevel: 2,
+      neighbors: {'hall_2': 20.0},
+    ),
+  };
+
+  @override
+  Map<String, GraphNode> get nodes => Map.unmodifiable(_nodes);
+
+  @override
+  PathResult findShortestPath(String startId, String endId) {
+    final start = _nodes[startId];
+    final end = _nodes[endId];
+
+    if (start == null || end == null) {
+      return const PathResult(nodeIds: [], totalDistance: 0, found: false);
+    }
+
+    final distances = <String, double>{
+      for (final nodeId in _nodes.keys) nodeId: double.infinity,
+    };
+    final previous = <String, String?>{
+      for (final nodeId in _nodes.keys) nodeId: null,
+    };
+    final visited = <String>{};
+
+    distances[startId] = 0;
+
+    while (true) {
+      final current = distances.entries
+          .where((entry) => !visited.contains(entry.key))
+          .fold<MapEntry<String, double>?>(null, (best, entry) {
+            if (best == null || entry.value < best.value) {
+              return entry;
+            }
+            return best;
+          });
+
+      if (current == null) {
+        break;
+      }
+
+      final currentId = current.key;
+      if (currentId == endId) {
+        break;
+      }
+
+      visited.add(currentId);
+      final node = _nodes[currentId]!;
+
+      for (final neighborEntry in node.neighbors.entries) {
+        final neighborId = neighborEntry.key;
+        if (visited.contains(neighborId)) {
+          continue;
+        }
+
+        final candidateDistance = current.value + neighborEntry.value;
+        if (candidateDistance < (distances[neighborId] ?? double.infinity)) {
+          distances[neighborId] = candidateDistance;
+          previous[neighborId] = currentId;
+        }
+      }
+    }
+
+    final endDistance = distances[endId];
+    if (endDistance == null || endDistance.isInfinite) {
+      return const PathResult(nodeIds: [], totalDistance: 0, found: false);
+    }
+
+    final path = <String>[];
+    String? cursor = endId;
+    while (cursor != null) {
+      path.add(cursor);
+      cursor = previous[cursor];
+    }
+
+    return PathResult(
+      nodeIds: path.reversed.toList(),
+      totalDistance: endDistance,
+      found: true,
+    );
+  }
+}
