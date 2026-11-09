@@ -7,10 +7,10 @@ class GraphNode extends Equatable {
   GraphNode({
     required this.id,
     required this.type,
-    this.gps,
-    this.pixelLocation,
     required this.buildingName,
     required this.floorLevel,
+    this.gps,
+    this.pixelLocation,
     Map<String, double>? neighbors,
   }) : assert(
          type == NodeType.entranceExit ? gps != null : gps == null,

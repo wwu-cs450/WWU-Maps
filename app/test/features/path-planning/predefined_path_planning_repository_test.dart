@@ -1,6 +1,4 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:wwu_maps_app/features/path-planning/data/predefined_path_planning_repository.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/graph_rules.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/models/graph_node.dart';
