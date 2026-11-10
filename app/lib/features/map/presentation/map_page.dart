@@ -6,6 +6,7 @@ import 'package:wwu_maps_app/features/location/domain/models/user_location.dart'
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_state.dart';
 import 'package:wwu_maps_app/features/location/presentation/location_error_dialog.dart';
+import 'package:wwu_maps_app/features/map/presentation/open_street_map_layer.dart';
 import 'package:wwu_maps_app/features/map/presentation/user_location_layers.dart';
 import 'package:wwu_maps_app/features/search/presentation/room_search_bar.dart';
 
@@ -69,11 +70,7 @@ class _MapPageState extends State<MapPage> {
                     },
                   ),
                   children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'edu.wallawalla.maps',
-                    ),
+                    OpenStreetMapLayer(),
                     if (state case LocationTracking(:final location))
                       ...userLocationLayers(location),
                     const SimpleAttributionWidget(
