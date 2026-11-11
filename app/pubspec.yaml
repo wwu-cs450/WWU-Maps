@@ -58,6 +58,8 @@ flutter:
 
   assets:
     - assets/campus/
+    - assets/maps/KRH-CSP/KRH-CSP_Floor1.geojson
+    - assets/maps/KRH-CSP/KRH-CSP_Floor2.geojson
     - assets/maps/KRH-CSP/KRH-CSP_Floor3.geojson
 
 # Launcher icons, generated from assets/icon/app_icon.png (a 1024x1024 render
