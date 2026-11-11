@@ -141,7 +141,7 @@ It then prints the fit, for example `46.72 sheet px per metre, rotation 0.79 deg
 ### 6. Hook it into the app and report
 
 1. Add the file under `assets:` in `app/pubspec.yaml`. Files are listed one by one.
-2. Run `flutter test` in `app/`. `app/test/features/map/data/floor_plan_geojson_test.dart` checks exact unit and door counts for some floors, such as 52 units and 54 doors on KRH-CSP floor 3. If you change those counts on purpose, update the test too.
+2. Run `flutter test` in `app/`. `app/test/features/map/data/floor_plan_geojson_test.dart` checks exact unit and door counts for some floors, such as 52 units and 53 doors on KRH-CSP floor 3. If you change those counts on purpose, update the test too.
 3. Tell the user what to check and what is missing: rooms without numbers, walls placed by eye, simplifications you made (such as a tiered hall drawn as one room), and the control point error. Suggest they look at the floor in the app or in QGIS against the map.
 
 ## Changing a floor that's already exported

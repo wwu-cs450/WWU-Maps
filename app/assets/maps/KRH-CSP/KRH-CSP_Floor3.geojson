@@ -89,41 +89,6 @@
         {
             "type": "Feature",
             "properties": {
-                "feature_type": "area",
-                "category": "terrace",
-                "name": null
-            },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
-                    [
-                        [
-                            -118.38989571,
-                            46.0460196
-                        ],
-                        [
-                            -118.38984957,
-                            46.046039
-                        ],
-                        [
-                            -118.38985218,
-                            46.04618102
-                        ],
-                        [
-                            -118.38989868,
-                            46.0461806
-                        ],
-                        [
-                            -118.38989571,
-                            46.0460196
-                        ]
-                    ]
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "feature_type": "unit",
                 "category": "room",
                 "name": null
@@ -2903,27 +2868,6 @@
                     [
                         -118.38999398,
                         46.04611661
-                    ]
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "feature_type": "opening",
-                "category": "door",
-                "name": null
-            },
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        -118.3898975,
-                        46.04611692
-                    ],
-                    [
-                        -118.38989767,
-                        46.04612591
                     ]
                 ]
             }
