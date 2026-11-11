@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:material_ui/material_ui.dart';
 
 class OpenStreetMapLayer extends StatelessWidget {
   const new({super.key});
