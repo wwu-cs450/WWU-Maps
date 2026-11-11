@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:material_ui/material_ui.dart';
 import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dart';
 import 'package:wwu_maps_app/features/search/presentation/cubit/search_state.dart';
 import 'package:wwu_maps_app/features/search/presentation/room_not_found_message.dart';

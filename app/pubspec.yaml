@@ -37,6 +37,7 @@ dependencies:
   geolocator: ^14.1.1
   latlong2: ^0.10.1
 
+  material_ui: any
 dev_dependencies:
   bloc_test: ^10.0.0
   flutter_launcher_icons: ^0.14.4

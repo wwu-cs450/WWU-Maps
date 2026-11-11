@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:wwu_maps_app/features/location/data/geolocator_location_repository.dart';
 import 'package:wwu_maps_app/features/location/domain/location_repository.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';

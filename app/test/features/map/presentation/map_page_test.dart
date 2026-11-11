@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:wwu_maps_app/features/location/domain/models/location_exception.dart';
 import 'package:wwu_maps_app/features/map/presentation/map_page.dart';
 import 'package:wwu_maps_app/features/search/domain/models/room_query.dart';

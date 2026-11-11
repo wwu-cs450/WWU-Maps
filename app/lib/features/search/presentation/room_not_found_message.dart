@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Shown under the search bar when the searched room doesn't exist.
 class RoomNotFoundMessage extends StatelessWidget {

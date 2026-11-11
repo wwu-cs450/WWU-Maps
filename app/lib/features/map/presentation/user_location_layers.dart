@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-
+import 'package:material_ui/material_ui.dart';
 import 'package:wwu_maps_app/features/location/domain/models/user_location.dart';
 
 /// The accuracy circle and the blue dot marking the user's location.

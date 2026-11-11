@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:wwu_maps_app/features/location/domain/models/user_location.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_state.dart';
