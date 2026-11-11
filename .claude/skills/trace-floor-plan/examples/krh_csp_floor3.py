@@ -201,8 +201,6 @@ doors += [vdoor(HUB_X0, 3940, 3990), vdoor(HUB_X1, 3945, 3995)]
 room(rect(HUB_X0, 4310, HUB_X1, 4579))
 doors.append(vdoor(HUB_X0, 4372, 4425))
 
-terrace = [(6963, 3627), (7150, 3627), (7150, 4450), (6963, 4560)]
-
 # --- Rotated wing -------------------------------------------------------------
 
 room([wing(W_LEFT, W_TOP), wing(815, W_TOP), wing(815, 318), wing(797, 318),
@@ -235,7 +233,6 @@ floor = Floor(
     rooms=rooms,
     doors=doors,
     treads=treads,
-    terraces=[terrace],
 )
 
 # Stairs read from their treads, so only the elevator is labeled. Room numbers

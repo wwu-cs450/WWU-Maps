@@ -13,7 +13,6 @@ class FloorPlan extends Equatable {
     required this.outline,
     this.units = const [],
     this.doors = const [],
-    this.terraces = const [],
   });
 
   /// Building code, e.g. `KRH-CSP`.
@@ -31,9 +30,6 @@ class FloorPlan extends Equatable {
   /// Door openings in the unit walls.
   final List<FloorSegment> doors;
 
-  /// Outdoor decks next to the building, as closed rings.
-  final List<List<LatLng>> terraces;
-
   @override
-  List<Object?> get props => [building, level, outline, units, doors, terraces];
+  List<Object?> get props => [building, level, outline, units, doors];
 }

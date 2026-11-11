@@ -21,11 +21,10 @@ class AssetFloorPlanRepository implements FloorPlanRepository {
 
   /// Reads a floor plan from GeoJSON.
   ///
-  /// Each feature's `feature_type` says what it is: 
+  /// Each feature's `feature_type` says what it is:
   /// - one `level` polygon (the floor outline, with `building` and `ordinal`),
   /// - `unit` polygons,
-  /// - `opening` lines (doors)
-  /// - `area` polygons (terraces).
+  /// - `opening` lines (doors).
   static FloorPlan parseFloorPlanGeoJson(String source) {
     final collection = jsonDecode(source) as Map<String, dynamic>;
     final features = (collection['features'] as List)
@@ -34,7 +33,6 @@ class AssetFloorPlanRepository implements FloorPlanRepository {
     Map<String, dynamic>? level;
     final units = <FloorUnit>[];
     final doors = <FloorSegment>[];
-    final terraces = <List<LatLng>>[];
 
     for (final feature in features) {
       final properties = feature['properties'] as Map<String, dynamic>;
@@ -58,8 +56,6 @@ class AssetFloorPlanRepository implements FloorPlanRepository {
           );
         case 'opening' when category == 'door':
           doors.add(_segment(geometry));
-        case 'area' when category == 'terrace':
-          terraces.add(_ring(geometry));
       }
     }
 
@@ -73,7 +69,6 @@ class AssetFloorPlanRepository implements FloorPlanRepository {
       outline: _ring(level['geometry'] as Map<String, dynamic>),
       units: units,
       doors: doors,
-      terraces: terraces,
     );
   }
 

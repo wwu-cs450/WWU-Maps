@@ -123,7 +123,7 @@ def main() -> None:
             trace = flatten(trace_path)
         sheet = Image.blend(image, trace, 0.5) if image else trace
 
-        xs, ys = zip(*(module.floor.footprint + [p for t in module.floor.terraces for p in t]))
+        xs, ys = zip(*module.floor.footprint)
         overview_box = (min(xs) - 150, min(ys) - 150, max(xs) + 150, max(ys) + 150)
 
     view(sheet, overview_box, int(grid[0]) if grid else 500, base + "_overview.png")

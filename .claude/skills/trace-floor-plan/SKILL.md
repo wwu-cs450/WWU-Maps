@@ -7,7 +7,7 @@ description: Turn a building floor plan image (a PNG, typically a blurry or badl
 
 This skill turns a floor plan image (a PNG with no coordinates) into `app/assets/maps/<BUILDING>/<BUILDING>_Floor<N>.geojson`. You describe the floor in a Python script in sheet pixels, check it against the image, place it on the map with control points, then export it once. This is how the KRH-CSP floors were made.
 
-Read [docs/FLOOR_PLANS.md](../../../docs/FLOOR_PLANS.md) first. It defines the GeoJSON format the app reads (`level`, `unit`, `opening`, `area`) and how the app draws it.
+Read [docs/FLOOR_PLANS.md](../../../docs/FLOOR_PLANS.md) first. It defines the GeoJSON format the app reads (`level`, `unit`, `opening`) and how the app draws it.
 
 ## Ground rules
 
@@ -121,7 +121,7 @@ The exporter places the plan using control points: three or more corners of the 
 
    Its nodes have `lat` and `lon`. A building may be several ways; KRH-CSP was 141026343 and 141026336.
 2. Match corners that are clearly the same point on both: outer corners of wings, the ends of long walls. Spread them over the whole building.
-3. Leave out corners where OSM disagrees with the plan. On KRH-CSP, OSM's outline included a terrace.
+3. Leave out corners where OSM disagrees with the plan.
 4. Put the pairs in `CONTROL_POINTS = [((x, y), (lat, lng)), ...]`, using the named wall coordinates for `(x, y)`.
 
 If a floor shares corners with a floor that's already exported, reuse that floor's `(lat, lng)` for those corners, so the floors line up with each other. Floors 1 and 2 of KRH-CSP did this with floor 3's points.

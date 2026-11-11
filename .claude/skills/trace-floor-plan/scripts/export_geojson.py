@@ -25,7 +25,6 @@ Feature schema (loosely after Apple's IMDF; every feature has `feature_type`,
                          extra properties `building` and `ordinal`
     unit     Polygon     category room | stairs | elevator
     opening  LineString  category door; drawn as a gap in the unit outlines
-    area     Polygon     category terrace (outdoor)
 
 Usage:
     python3 .claude/skills/trace-floor-plan/scripts/export_geojson.py FLOOR_SCRIPT [--force]
@@ -299,7 +298,6 @@ def main() -> None:
             building=BUILDING, ordinal=LEVEL,
         )
     ]
-    features += [feature("area", "terrace", polygon(t)) for t in floor.terraces]
     features += [feature("unit", r.kind, polygon(r.poly), r.label) for r in floor.rooms]
     features += [feature("opening", "door", line(p, q)) for p, q in doors]
     # Stair treads aren't exported: the app draws them inside `stairs` units.

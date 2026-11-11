@@ -30,8 +30,6 @@ STAIR_FILL = (205, 191, 164)
 ELEVATOR_FILL = (205, 191, 164)
 TREAD = (150, 134, 106)
 EXTERIOR = (140, 124, 98)
-TERRACE_FILL = (236, 232, 224)
-TERRACE_LINE = (205, 196, 180)
 LABEL = (92, 78, 58)
 
 ROOM_STROKE_W = 7
@@ -59,7 +57,6 @@ class Floor:
     rooms: list[Room] = field(default_factory=list)
     doors: list[tuple[Point, Point]] = field(default_factory=list)
     treads: list[tuple[Point, Point]] = field(default_factory=list)
-    terraces: list[list[Point]] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -176,10 +173,7 @@ def render(
     Only the area around the building is drawn (supersampled by `scale` for
     smooth edges); the rest of the sheet is plain background.
     """
-    pts = list(floor.footprint)
-    for t in floor.terraces:
-        pts += t
-    xs, ys = zip(*pts)
+    xs, ys = zip(*floor.footprint)
     bx0 = max(0, int(min(xs)) - margin)
     by0 = max(0, int(min(ys)) - margin)
     bx1 = min(size[0], int(max(xs)) + margin)
@@ -199,22 +193,6 @@ def render(
     def outline(points, color, width):
         pp = poly(points)
         d.line(pp + pp[:1], fill=color, width=int(width * s), joint="curve")
-
-    # Terraces (outdoor decks) underneath everything, with a paving grid.
-    for t in floor.terraces:
-        d.polygon(poly(t), fill=TERRACE_FILL)
-        txs, tys = zip(*t)
-        step = 50
-        mask = Image.new("L", (W, H), 0)
-        ImageDraw.Draw(mask).polygon(poly(t), fill=255)
-        grid = Image.new("RGB", (W, H), TERRACE_FILL)
-        g = ImageDraw.Draw(grid)
-        for x in range(int(min(txs)), int(max(txs)) + 1, step):
-            g.line([P((x, min(tys))), P((x, max(tys)))], fill=TERRACE_LINE, width=3 * s)
-        for y in range(int(min(tys)), int(max(tys)) + 1, step):
-            g.line([P((min(txs), y)), P((max(txs), y))], fill=TERRACE_LINE, width=3 * s)
-        img.paste(grid, (0, 0), mask)
-        outline(t, TERRACE_LINE, 6)
 
     # Building floor (what is left over becomes corridor / lobby).
     d.polygon(poly(floor.footprint), fill=CORRIDOR)
@@ -274,24 +252,6 @@ def render_svg(floor: Floor, out_path: str, size: tuple[int, int] = (10200, 6600
         f'viewBox="0 0 {w} {h}">',
         f'<rect width="{w}" height="{h}" fill="{_hex(BACKGROUND)}"/>',
     ]
-
-    # Terraces with a paving grid clipped to their outline.
-    for i, t in enumerate(floor.terraces):
-        txs, tys = zip(*t)
-        out.append(f'<clipPath id="terrace-{i}"><polygon points="{pts(t)}"/></clipPath>')
-        out.append(f'<g id="terrace-{i}-fill">')
-        out.append(f'<polygon points="{pts(t)}" fill="{_hex(TERRACE_FILL)}"/>')
-        out.append(f'<g clip-path="url(#terrace-{i})">')
-        for x in range(int(min(txs)), int(max(txs)) + 1, 50):
-            out.append(seg((x, min(tys)), (x, max(tys)), TERRACE_LINE, 3))
-        for y in range(int(min(tys)), int(max(tys)) + 1, 50):
-            out.append(seg((min(txs), y), (max(txs), y), TERRACE_LINE, 3))
-        out.append("</g>")
-        out.append(
-            f'<polygon points="{pts(t)}" fill="none" stroke="{_hex(TERRACE_LINE)}" '
-            f'stroke-width="6" stroke-linejoin="round"/>'
-        )
-        out.append("</g>")
 
     out.append(f'<polygon id="footprint" points="{pts(floor.footprint)}" fill="{_hex(CORRIDOR)}"/>')
 
