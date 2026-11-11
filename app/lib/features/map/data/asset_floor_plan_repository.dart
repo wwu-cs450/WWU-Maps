@@ -19,16 +19,13 @@ class AssetFloorPlanRepository implements FloorPlanRepository {
     return parseFloorPlanGeoJson(source);
   }
 
-  /// Reads a floor plan from GeoJSON, in the schema written by
-  /// `tool/floor_plans/export_geojson.py`.
+  /// Reads a floor plan from GeoJSON.
   ///
   /// Each feature's `feature_type` says what it is: 
   /// - one `level` polygon (the floor outline, with `building` and `ordinal`),
   /// - `unit` polygons,
   /// - `opening` lines (doors)
   /// - `area` polygons (terraces).
-  /// 
-  /// Features this app doesn't draw yet are skipped, so the file can carry more than the app uses.
   static FloorPlan parseFloorPlanGeoJson(String source) {
     final collection = jsonDecode(source) as Map<String, dynamic>;
     final features = (collection['features'] as List)
