@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wwu_maps_app/features/location/data/geolocator_location_repository.dart';
 import 'package:wwu_maps_app/features/location/domain/location_repository.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
+import 'package:wwu_maps_app/features/map/data/asset_floor_plan_repository.dart';
+import 'package:wwu_maps_app/features/map/domain/floor_plan_repository.dart';
 import 'package:wwu_maps_app/features/map/presentation/map_page.dart';
 import 'package:wwu_maps_app/features/search/data/placeholder_room_repository.dart';
 import 'package:wwu_maps_app/features/search/domain/room_repository.dart';
@@ -13,6 +15,7 @@ void main() {
     const MainApp(
       locationRepository: GeolocatorLocationRepository(),
       roomRepository: PlaceholderRoomRepository(),
+      floorPlanRepository: AssetFloorPlanRepository(),
     ),
   );
 }
@@ -21,11 +24,13 @@ class MainApp extends StatelessWidget {
   const MainApp({
     required this.locationRepository,
     required this.roomRepository,
+    required this.floorPlanRepository,
     super.key,
   });
 
   final LocationRepository locationRepository;
   final RoomRepository roomRepository;
+  final FloorPlanRepository floorPlanRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,7 @@ class MainApp extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: locationRepository),
         RepositoryProvider.value(value: roomRepository),
+        RepositoryProvider.value(value: floorPlanRepository),
       ],
       child: BlocProvider(
         create: (context) =>

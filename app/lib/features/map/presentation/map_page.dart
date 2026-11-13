@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -6,6 +8,10 @@ import 'package:wwu_maps_app/features/location/domain/models/user_location.dart'
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit.dart';
 import 'package:wwu_maps_app/features/location/presentation/cubit/location_state.dart';
 import 'package:wwu_maps_app/features/location/presentation/location_error_dialog.dart';
+import 'package:wwu_maps_app/features/map/domain/floor_plan_repository.dart';
+import 'package:wwu_maps_app/features/map/domain/models/floor_plan.dart';
+import 'package:wwu_maps_app/features/map/presentation/floor_plan_layer.dart';
+import 'package:wwu_maps_app/features/map/presentation/open_street_map_layer.dart';
 import 'package:wwu_maps_app/features/map/presentation/user_location_layers.dart';
 import 'package:wwu_maps_app/features/search/presentation/room_search_bar.dart';
 
@@ -24,6 +30,25 @@ class _MapPageState extends State<MapPage> {
   final _mapController = MapController();
   bool _mapReady = false;
   bool _hasCenteredOnUser = false;
+
+  /// The floor drawn on the map, once loaded. Fixed until there is a floor picker.
+  FloorPlan? _floorPlan;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_loadFloorPlan('KRH-CSP', 3));
+  }
+
+  Future<void> _loadFloorPlan(String building, int level) async {
+    final plan = await context.read<FloorPlanRepository>().floorPlan(
+      building,
+      level,
+    );
+    if (mounted) {
+      setState(() => _floorPlan = plan);
+    }
+  }
 
   @override
   void dispose() {
@@ -69,16 +94,10 @@ class _MapPageState extends State<MapPage> {
                     },
                   ),
                   children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'edu.wallawalla.maps',
-                    ),
+                    OpenStreetMapLayer(),
+                    if (_floorPlan case final plan?) FloorPlanLayer(plan: plan),
                     if (state case LocationTracking(:final location))
                       ...userLocationLayers(location),
-                    const SimpleAttributionWidget(
-                      source: Text('OpenStreetMap contributors'),
-                    ),
                   ],
                 ),
                 const Align(

@@ -8,19 +8,25 @@ import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dar
 import 'package:wwu_maps_app/features/search/presentation/cubit/search_state.dart';
 import 'package:wwu_maps_app/main.dart';
 
+import '../../../mocks/mock_floor_plan_repository.dart';
 import '../../../mocks/mock_location_repository.dart';
 import '../../../mocks/mock_room_repository.dart';
 
 void main() {
   late MockLocationRepository repository;
+  late MockFloorPlanRepository floorPlans;
 
-  setUp(() => repository = MockLocationRepository());
+  setUp(() {
+    repository = MockLocationRepository();
+    floorPlans = MockFloorPlanRepository();
+  });
 
   Future<void> pumpApp(WidgetTester tester) async {
     await tester.pumpWidget(
       MainApp(
         locationRepository: repository,
         roomRepository: MockRoomRepository({'101'}),
+        floorPlanRepository: floorPlans,
       ),
     );
     await tester.pump();
@@ -152,5 +158,13 @@ void main() {
 
       expect(find.text("Room KRH 999 doesn't exist"), findsNothing);
     });
+  });
+
+  testWidgets('draws the KRH-CSP floor 3 plan', (tester) async {
+    await pumpApp(tester);
+    await tester.pump();
+
+    expect(floorPlans.requests, [('KRH-CSP', 3)]);
+    expect(find.byKey(const ValueKey('floor-plan-KRH-CSP-3')), findsOneWidget);
   });
 }
