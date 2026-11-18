@@ -6,16 +6,17 @@ import 'package:wwu_maps_app/features/location/presentation/cubit/location_cubit
 import 'package:wwu_maps_app/features/map/data/asset_floor_plan_repository.dart';
 import 'package:wwu_maps_app/features/map/domain/floor_plan_repository.dart';
 import 'package:wwu_maps_app/features/map/presentation/map_page.dart';
-import 'package:wwu_maps_app/features/search/data/placeholder_room_repository.dart';
+import 'package:wwu_maps_app/features/search/data/floor_plan_room_repository.dart';
 import 'package:wwu_maps_app/features/search/domain/room_repository.dart';
 import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dart';
 
 void main() {
+  const floorPlanRepository = AssetFloorPlanRepository();
   runApp(
-    const MainApp(
-      locationRepository: GeolocatorLocationRepository(),
-      roomRepository: PlaceholderRoomRepository(),
-      floorPlanRepository: AssetFloorPlanRepository(),
+    MainApp(
+      locationRepository: const GeolocatorLocationRepository(),
+      roomRepository: FloorPlanRoomRepository(floorPlanRepository),
+      floorPlanRepository: floorPlanRepository,
     ),
   );
 }
