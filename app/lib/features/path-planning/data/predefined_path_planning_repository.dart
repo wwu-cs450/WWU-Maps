@@ -1,9 +1,9 @@
-import 'package:flutter/rendering.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/graph_rules.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/models/graph_node.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/models/node_type.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/models/path_result.dart';
+import 'package:wwu_maps_app/features/path-planning/domain/models/route_point.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/path_planning_repository.dart';
 
 class PredefinedPathPlanningRepository implements PathPlanningRepository {
@@ -12,74 +12,29 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
   }
 
   final Map<String, GraphNode> _nodes = {
-    'hall_1': GraphNode(
-      id: 'hall_1',
+    'r_301': GraphNode(
+      id: 'r_301',
+      type: NodeType.room,
+      location: const LatLng(46.04610361, -118.39008493),
+      buildingName: 'KRH-CSP',
+      floorLevel: 3,
+      neighbors: {'hall_301': 8.0},
+    ),
+    'hall_301': GraphNode(
+      id: 'hall_301',
       type: NodeType.hallway,
-      pixelLocation: const Offset(200, 180),
-      buildingName: 'Science Center',
-      floorLevel: 1,
-      neighbors: {
-        'r_101': 18.0,
-        'r_102': 22.0,
-        'stair_1': 12.0,
-        'entrance_1': 16.0,
-      },
+      location: const LatLng(46.04611900, -118.39016000),
+      buildingName: 'KRH-CSP',
+      floorLevel: 3,
+      neighbors: {'r_301': 8.0, 'r_302': 8.0},
     ),
-    'r_101': GraphNode(
-      id: 'r_101',
+    'r_302': GraphNode(
+      id: 'r_302',
       type: NodeType.room,
-      pixelLocation: const Offset(120, 220),
-      buildingName: 'Science Center',
-      floorLevel: 1,
-      neighbors: {'hall_1': 18.0},
-    ),
-    'r_102': GraphNode(
-      id: 'r_102',
-      type: NodeType.room,
-      pixelLocation: const Offset(280, 220),
-      buildingName: 'Science Center',
-      floorLevel: 1,
-      neighbors: {'hall_1': 22.0},
-    ),
-    'stair_1': GraphNode(
-      id: 'stair_1',
-      type: NodeType.stairway,
-      pixelLocation: const Offset(200, 120),
-      buildingName: 'Science Center',
-      floorLevel: 1,
-      neighbors: {'hall_1': 12.0, 'stair_2': 18.0},
-    ),
-    'entrance_1': GraphNode(
-      id: 'entrance_1',
-      type: NodeType.entranceExit,
-      gps: const LatLng(46.0489, -118.3672),
-      buildingName: 'Science Center',
-      floorLevel: 1,
-      neighbors: {'hall_1': 16.0},
-    ),
-    'hall_2': GraphNode(
-      id: 'hall_2',
-      type: NodeType.hallway,
-      pixelLocation: const Offset(200, 320),
-      buildingName: 'Science Center',
-      floorLevel: 2,
-      neighbors: {'stair_2': 14.0, 'r_201': 20.0},
-    ),
-    'stair_2': GraphNode(
-      id: 'stair_2',
-      type: NodeType.stairway,
-      pixelLocation: const Offset(200, 420),
-      buildingName: 'Science Center',
-      floorLevel: 2,
-      neighbors: {'hall_2': 14.0, 'stair_1': 18.0},
-    ),
-    'r_201': GraphNode(
-      id: 'r_201',
-      type: NodeType.room,
-      pixelLocation: const Offset(280, 320),
-      buildingName: 'Science Center',
-      floorLevel: 2,
-      neighbors: {'hall_2': 20.0},
+      location: const LatLng(46.04613468, -118.39008584),
+      buildingName: 'KRH-CSP',
+      floorLevel: 3,
+      neighbors: {'hall_301': 8.0},
     ),
   };
 
@@ -93,6 +48,15 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
 
     if (start == null || end == null) {
       return const PathResult(nodeIds: [], totalDistance: 0, found: false);
+    }
+
+    if (startId == endId) {
+      return PathResult(
+        nodeIds: [startId],
+        totalDistance: 0,
+        routePoints: [_routePoint(start)],
+        found: true,
+      );
     }
 
     final distances = <String, double>{
@@ -142,7 +106,7 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
     }
 
     final endDistance = distances[endId];
-    if (endDistance == null || endDistance.isInfinite) {
+    if (endDistance == null || !endDistance.isFinite) {
       return const PathResult(nodeIds: [], totalDistance: 0, found: false);
     }
 
@@ -153,10 +117,23 @@ class PredefinedPathPlanningRepository implements PathPlanningRepository {
       cursor = previous[cursor];
     }
 
+    final nodeIds = path.reversed.toList();
+    final routePoints = nodeIds
+        .map((nodeId) => _routePoint(_nodes[nodeId]!))
+        .toList(growable: false);
+
     return PathResult(
-      nodeIds: path.reversed.toList(),
+      nodeIds: nodeIds,
       totalDistance: endDistance,
+      routePoints: routePoints,
       found: true,
     );
   }
+
+  static RoutePoint _routePoint(GraphNode node) => RoutePoint(
+    nodeId: node.id,
+    location: node.location,
+    buildingName: node.buildingName,
+    floorLevel: node.floorLevel,
+  );
 }

@@ -12,7 +12,12 @@ import 'package:wwu_maps_app/features/map/domain/floor_plan_repository.dart';
 import 'package:wwu_maps_app/features/map/domain/models/floor_plan.dart';
 import 'package:wwu_maps_app/features/map/presentation/floor_plan_layer.dart';
 import 'package:wwu_maps_app/features/map/presentation/open_street_map_layer.dart';
+import 'package:wwu_maps_app/features/map/presentation/proposed_path_layer.dart';
 import 'package:wwu_maps_app/features/map/presentation/user_location_layers.dart';
+import 'package:wwu_maps_app/features/path-planning/presentation/cubit/path_planning_cubit.dart';
+import 'package:wwu_maps_app/features/path-planning/presentation/cubit/path_planning_state.dart';
+import 'package:wwu_maps_app/features/search/presentation/cubit/search_cubit.dart';
+import 'package:wwu_maps_app/features/search/presentation/cubit/search_state.dart';
 import 'package:wwu_maps_app/features/search/presentation/room_search_bar.dart';
 
 class MapPage extends StatefulWidget {
@@ -75,47 +80,78 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LocationCubit, LocationState>(
-      listener: (context, state) => _centerOnUserOnce(state),
-      builder: (context, state) => Stack(
-        children: [
-          Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Stack(
-              children: [
-                FlutterMap(
-                  mapController: _mapController,
-                  options: MapOptions(
-                    initialCenter: _campusCenter,
-                    initialZoom: 16,
-                    onMapReady: () {
-                      _mapReady = true;
-                      _centerOnUserOnce(context.read<LocationCubit>().state);
-                    },
-                  ),
+    return BlocListener<SearchCubit, SearchState>(
+      listener: (context, searchState) {
+        final pathPlanning = context.read<PathPlanningCubit>();
+        switch (searchState) {
+          case SearchSubmitted(:final query):
+            pathPlanning.showShortestPath('r_301', 'r_${query.roomNumber}');
+          case SearchRoomNotFound():
+            pathPlanning.clear();
+          case SearchIdle():
+            break;
+        }
+      },
+      child: BlocConsumer<LocationCubit, LocationState>(
+        listener: (context, state) => _centerOnUserOnce(state),
+        builder: (context, state) {
+          final pathState = context.watch<PathPlanningCubit>().state;
+          final path = switch (pathState) {
+            PathPlanningResult(:final result) => result,
+            _ => null,
+          };
+
+          return Stack(
+            children: [
+              Scaffold(
+                resizeToAvoidBottomInset: false,
+                body: Stack(
                   children: [
-                    OpenStreetMapLayer(),
-                    if (_floorPlan case final plan?) FloorPlanLayer(plan: plan),
-                    if (state case LocationTracking(:final location))
-                      ...userLocationLayers(location),
+                    FlutterMap(
+                      mapController: _mapController,
+                      options: MapOptions(
+                        initialCenter: _campusCenter,
+                        initialZoom: 16,
+                        onMapReady: () {
+                          _mapReady = true;
+                          _centerOnUserOnce(
+                            context.read<LocationCubit>().state,
+                          );
+                        },
+                      ),
+                      children: [
+                        OpenStreetMapLayer(),
+                        if (_floorPlan case final plan?) ...[
+                          FloorPlanLayer(plan: plan),
+                          ProposedPathLayer(
+                            building: plan.building,
+                            floorLevel: plan.level,
+                            nodes: context.read<PathPlanningCubit>().nodes,
+                            path: path,
+                          ),
+                        ],
+                        if (state case LocationTracking(:final location))
+                          ...userLocationLayers(location),
+                      ],
+                    ),
+                    const Align(
+                      alignment: Alignment.topCenter,
+                      child: SafeArea(
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: RoomSearchBar(),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                const Align(
-                  alignment: Alignment.topCenter,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: RoomSearchBar(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Above the Scaffold so the scrim also covers the app bar.
-          if (state case LocationUnavailable(:final failure))
-            LocationErrorDialog(failure: failure),
-        ],
+              ),
+              // Above the Scaffold so the scrim also covers the app bar.
+              if (state case LocationUnavailable(:final failure))
+                LocationErrorDialog(failure: failure),
+            ],
+          );
+        },
       ),
     );
   }
