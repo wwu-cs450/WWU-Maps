@@ -35,7 +35,8 @@ class ProposedPathLayer extends StatelessWidget {
     for (var i = 0; i < path.routePoints.length - 1; i++) {
       final start = path.routePoints[i];
       final end = path.routePoints[i + 1];
-      final bothOnCurrentFloor = start.buildingName == building &&
+      final bothOnCurrentFloor =
+          start.buildingName == building &&
           start.floorLevel == floorLevel &&
           end.buildingName == building &&
           end.floorLevel == floorLevel;

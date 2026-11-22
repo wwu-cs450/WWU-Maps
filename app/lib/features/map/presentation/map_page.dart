@@ -85,10 +85,7 @@ class _MapPageState extends State<MapPage> {
         final pathPlanning = context.read<PathPlanningCubit>();
         switch (searchState) {
           case SearchSubmitted(:final query):
-            pathPlanning.showShortestPath(
-              'r_301',
-              'r_${query.roomNumber}',
-            );
+            pathPlanning.showShortestPath('r_301', 'r_${query.roomNumber}');
           case SearchRoomNotFound():
             pathPlanning.clear();
           case SearchIdle():
