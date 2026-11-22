@@ -167,4 +167,16 @@ void main() {
     expect(floorPlans.requests, [('KRH-CSP', 3)]);
     expect(find.byKey(const ValueKey('floor-plan-KRH-CSP-3')), findsOneWidget);
   });
+
+  testWidgets('draws the initial optimal path on the active floor', (
+    tester,
+  ) async {
+    await pumpApp(tester);
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey('proposed-path-KRH-CSP-3')),
+      findsOneWidget,
+    );
+  });
 }

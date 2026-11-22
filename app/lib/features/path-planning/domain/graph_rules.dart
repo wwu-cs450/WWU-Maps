@@ -24,20 +24,23 @@ class GraphRules {
     for (final entry in nodes.entries) {
       final current = entry.value;
 
-      if (current.type == NodeType.entranceExit && current.gps == null) {
+      if (!current.location.latitude.isFinite ||
+          !current.location.longitude.isFinite) {
         throw StateError(
-          'Entrance/exit node "${current.id}" must include GPS data.',
+          'Node "${current.id}" must include a finite geographic location.',
         );
       }
 
-      if (current.type != NodeType.entranceExit &&
-          current.pixelLocation == null) {
-        throw StateError(
-          'Non-entrance/exit node "${current.id}" must include pixelLocation.',
-        );
-      }
+      for (final neighborEntry in current.neighbors.entries) {
+        final neighborId = neighborEntry.key;
+        final weight = neighborEntry.value;
+        if (!weight.isFinite || weight <= 0) {
+          throw StateError(
+            'Node "${current.id}" has an invalid edge weight to '
+            '"$neighborId".',
+          );
+        }
 
-      for (final neighborId in current.neighbors.keys) {
         final neighbor = nodes[neighborId];
         if (neighbor == null) {
           throw StateError(

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/rendering.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:wwu_maps_app/features/path-planning/domain/models/node_type.dart';
 
@@ -7,27 +6,15 @@ class GraphNode extends Equatable {
   GraphNode({
     required this.id,
     required this.type,
+    required this.location,
     required this.buildingName,
     required this.floorLevel,
-    this.gps,
-    this.pixelLocation,
     Map<String, double>? neighbors,
-  }) : assert(
-         type == NodeType.entranceExit ? gps != null : gps == null,
-         'Only entrance/exit nodes can have GPS.',
-       ),
-       assert(
-         type == NodeType.entranceExit
-             ? pixelLocation == null
-             : pixelLocation != null,
-         'Only non-entrance/exit nodes can have pixelLocation.',
-       ),
-       neighbors = Map.unmodifiable(neighbors ?? const <String, double>{});
+  }) : neighbors = Map.unmodifiable(neighbors ?? const <String, double>{});
 
   final String id;
   final NodeType type;
-  final LatLng? gps;
-  final Offset? pixelLocation;
+  final LatLng location;
   final String buildingName;
   final int floorLevel;
 
@@ -37,8 +24,7 @@ class GraphNode extends Equatable {
   GraphNode copyWith({
     String? id,
     NodeType? type,
-    LatLng? gps,
-    Offset? pixelLocation,
+    LatLng? location,
     String? buildingName,
     int? floorLevel,
     Map<String, double>? neighbors,
@@ -46,8 +32,7 @@ class GraphNode extends Equatable {
     return GraphNode(
       id: id ?? this.id,
       type: type ?? this.type,
-      gps: gps ?? this.gps,
-      pixelLocation: pixelLocation ?? this.pixelLocation,
+      location: location ?? this.location,
       buildingName: buildingName ?? this.buildingName,
       floorLevel: floorLevel ?? this.floorLevel,
       neighbors: neighbors ?? this.neighbors,
@@ -58,8 +43,7 @@ class GraphNode extends Equatable {
   List<Object?> get props => [
     id,
     type,
-    gps,
-    pixelLocation,
+    location,
     buildingName,
     floorLevel,
     neighbors,
